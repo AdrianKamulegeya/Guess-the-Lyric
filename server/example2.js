@@ -2,29 +2,51 @@ var sqlite3 = require('sqlite3').verbose();
 var db = new sqlite3.Database('demodb02');
 var gameData = "hello world"
 var fs = require('fs')
+var xml2js = require('xml2js');
 
-  xml2js = require('xml2js');
-
-
+var opts = {rootName: "game"}
+var builder = new xml2js.Builder(opts) 
+//var obj = {group: [{word: ["I", "You"]}, {word: ["so", "over"]}]}
+var obj = { group: [ {id: 1,words:[ 
+                { id: 1, word: 'I'},
+                { id: 2, word: 'You'},
+                { id: 3, word: 'We'}
+            ]},{id: 2,words:[ 
+                { id: 1, word: 'so'},
+                { id: 2, word: 'over'},
+                { id: 3, word: 'in'}
+            ]}
+            
+    ]
+};
+var xml = builder.buildObject(obj);
+console.log("**" + xml)
 
 var parseString = require('xml2js').parseString;
-var xml = "<root>Hello xml2js!</root>"
+//var xml = "<root>Hello xml2js!</root>"
 parseString(xml, function (err, result) {
-    console.dir(result);
+    
+	console.dir(result.game.group);
+	console.dir(result.game.group[0].words);
 });
 
-var parser = new xml2js.Parser();
-fs.readFile(__dirname + '/static.xml', function(err, data) {
-    parser.parseString(data, function (err, result) {
-        console.dir(result);
-        console.log('Done');
-    });
-});
+//var parser = new xml2js.Parser();
+//fs.readFile(__dirname + '/static.xml', function(err, data) {
+  //  parser.parseString(data, function (err, result) {
+    //    console.dir(result);
+      //  console.log('Done');
+    //});
+//});
+
+
+
+
+	
 
 fs.readFile("static.xml", 'utf8', function(err, data){
 	if (err) throw err
-	console.log('OK: ' + "static.xml");
-	console.log(data)
+	//console.log('OK: ' + "static.xml");
+	//console.log(data)
 	gameData = data
 })
  
